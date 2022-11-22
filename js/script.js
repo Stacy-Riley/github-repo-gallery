@@ -1,5 +1,7 @@
 //Div is where your profile information will appear:
 const overview = document.querySelector(".overview");
+//UL where the repos are displayed:
+const repoList = document.querySelector(".repo-list");
 //Github username:
 const username = "Stacy-Riley";
 
@@ -35,6 +37,30 @@ const displayData = function(data){
                         </div> ` 
     
     //Append so it displays in the HTML page:
-    overview.append(div);    
+    overview.append(div);
+    
+    //Call to start grabbing repo data:
+    grabRepos();
 }
 
+
+//Async function to grab repos from Github:
+const grabRepos = async function(){
+    const request = await fetch(`https://api.github.com/users/${username}/repos?sort=updated/?per_page=100`);
+    const repos = await request.json();
+    // console.log(repos);
+
+    displayRepos(repos);
+}
+
+//Function to display the repos:
+const displayRepos = function(repos){
+    for(let item of repos){
+        let listItem = document.createElement("li");
+        listItem.classList.add("repos");
+        listItem.innerHTML = `<H3>${item.name}</H3>`
+        
+        //Append so it displays in the HTML page:
+        repoList.append(listItem);    
+    }
+}
